@@ -1,2 +1,18 @@
 # thngs
-all the internet-of things
+
+This repository contains code for rmtly Incorporated's IoT devices (hereafter referred to as "thngs").
+
+```shell
+- client/
+  - blank/    # files for blanking device so new code can be sent
+  - firmware/ # NodeMCU firmware files
+  - mqtt/     # files used to create an MQTT-based client
+  - nghtlght/ # a thng that acts as a night-light
+  - esptool   # a tool for flashing firmware
+  - luatool   # a tool to write a single file to the client
+  - flash.sh  # entry point to sending new lua code; run from thng directory
+```
+
+## Flashing firmware
+
+## Sending client code

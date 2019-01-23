@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+	echo 1>&2 "Usage: $0 <file> [<file> [<file> [...] ] ]"
+	exit 1
+fi
+
+dir="$HOME/src/luatool/luatool"
+cmd="./luatool.py"
+tty="${LUATOOL_DEV:-/dev/tty.usbserial-1440}"
+baud=115200
+delay="0.1"
+
+start_dir=`pwd`
+
+while [[ "$1" =~ ^[-].* ]]; do
+	opts="$opts $1"
+	shift
+done
+
+echo "Flashing device '$tty'..."
+
+cd "$dir" || {
+	echo 1>&2 "$0: failed to change to '$dir'."
+	exit 2
+}
+
+for file in "$@"; do
+	[ -f "$file" ] || file="$start_dir/$file"
+	[ -f "$file" ] || {
+		echo 1<&2 "$0: No such file or directory: $file"
+		exit 4
+	}
+	echo "=======[ $file ]======"
+	"$cmd" $opts -b "$baud" -p "$tty" --src "$file" --delay "$delay" || {
+		echo 1>&2 "$0: Failed to send file '$file'."
+		exit 3
+	}
+	echo
+done

@@ -1,0 +1,44 @@
+#!/bin/bash
+
+TTY="${LUATOOL_DEV:-/dev/ttyUSB0}"
+ESPTOOL="$HOME/src/esptool/esptool.py"
+FW_DIR="$HOME/src/nodemcu-firmware/bin"
+
+function usage {
+	echo 1>&2 "Usage: $0 erase"
+	echo 1>&2 "Usage: $0 flash <filename>"
+	echo 1>&2 "Usage: $0 verify <filename>"
+	echo 1>&2
+	echo 1>&2 "Most recent firmware files in $FW_DIR:"
+	cd "$FW_DIR" && ls -lt *.bin | head -n15 1>&2
+}
+
+function get_recent {
+	ls -t $FW_DIR/*$1*.bin | head -n 1
+}
+
+if [ "$1" == "erase" ]; then
+	$ESPTOOL --port "$TTY" erase_flash
+elif [ "$1" == "flash" ]; then
+	if [ -n "$2" ]; then
+		recent=$(get_recent "$2")
+		echo "Flashing $recent..."
+		$ESPTOOL -p "$TTY" -b 115200 write_flash -fm dout 0x0 "$recent"
+	else
+		usage
+		exit 1
+	fi
+elif [ "$1" == "verify" ]; then
+	if [ -n "$2" ]; then
+		recent=$(get_recent "$2")
+		echo "Verifying $recent..."
+		$ESPTOOL -p "$TTY" -b 115200 verify_flash --diff yes 0x0 "$recent"
+	else
+		usage
+		exit 1
+	fi
+else
+	usage
+	exit 1
+fi
+
