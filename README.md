@@ -15,4 +15,18 @@ This repository contains code for rmtly Incorporated's IoT devices (hereafter re
 
 ## Flashing firmware
 
-## Sending client code
+1. change to `client` directory
+2. `./esptool erase && sleep 30 && ./esptool flash master`
+
+## Flashing client code
+
+1. change to device type directory, e.g. `nghtlght`
+2. `../flash.sh`
+
+To flash just a subset of files, e.g. on subsequent runs when you've only modified some files:
+
+`../flash.sh <file> [<file> [<file> [...]]]`
+
+E.g.
+
+`../flash.sh ../mqtt/config.lua app.lua`
