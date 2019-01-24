@@ -1,8 +1,8 @@
 #!/bin/bash
 
-TTY="${LUATOOL_DEV:-/dev/ttyUSB0}"
-ESPTOOL="$HOME/src/esptool/esptool.py"
-FW_DIR="$HOME/src/nodemcu-firmware/bin"
+TTY="${LUATOOL_DEV:-/dev/tty.usbserial-1440}"
+ESPTOOL="/usr/local/bin/esptool.py"
+FW_DIR="$HOME/src/rmtly/thngs/client/firmware"
 
 function usage {
 	echo 1>&2 "Usage: $0 erase"

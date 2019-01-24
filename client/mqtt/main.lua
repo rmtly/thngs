@@ -75,6 +75,12 @@ function connect_mqtt()
 		if not tmr.stop(CONNECT_TIMER) then
 			print('Unable to stop timer ', CONNECT_TIMER)
 		end
+
+		if CONNCHECK then
+			print("Starting conncheck timer...")
+			tmr.alarm(CONNCHECK_TIMER, CONNCHECK_DELAY, 1, conncheck)
+		end
+
 		print("Connecting MQTT...", MQTT_HOST, MQTT_PORT, MQTT_SECURE)
 		-- m:on("connect", mqtt_connected)
 		m:connect(MQTT_HOST, MQTT_PORT, MQTT_SECURE, mqtt_connected, mqtt_on_connect_failure)
@@ -164,10 +170,5 @@ else
 	print("Not using secure MQTT connection; not setting cert.")
 end
 
-print("Starting connect timer...")
-tmr.alarm(CONNECT_TIMER, CONNECT_DELAY, tmr.ALARM_AUTO, connect_mqtt)
-
-if CONNCHECK then
-	print("Starting conncheck timer...")
-	tmr.alarm(CONNCHECK_TIMER, CONNCHECK_DELAY, 1, conncheck)
-end
+-- print("Starting connect timer...")
+-- tmr.alarm(CONNECT_TIMER, CONNECT_DELAY, tmr.ALARM_AUTO, connect_mqtt)
