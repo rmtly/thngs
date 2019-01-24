@@ -5,12 +5,8 @@ OK='\033[1;32m'
 NC='\033[0m'
 
 DEBUG=${FLASH_DEBUG:-false}
-MAC=true
 BAUD=115200
 RESTART_NODEMCU=true
-RESTART_BEFORE_BLANK=${FLASH_RESTART:-true}
-RESTART_AFTER_BLANK=${FLASH_RESTART:-true}
-RESTART_AFTER_FLASH=${FLASH_RESTART:-true}
 POST_RESTART_DELAY=2
 PRE_RESTART_DELAY=1
 START_SCREEN=${START_SCREEN:-true}
@@ -43,7 +39,7 @@ cd "$sd" || {
 # config
 blank="../blank/init.lua"
 init_lua="../init.lua"
-scripts="config wifi init main post"
+scripts="config wifi init main post secrets"
 app_scripts="pre config_app app"
 blank_retry_sleep=0.25
 
@@ -51,11 +47,7 @@ blank_retry_sleep=0.25
 function restart_nodemcu {
     if $RESTART_NODEMCU; then
         echo "$0: [RESTART] $tty"
-        if $MAC; then
-            $LUATOOL -d "$RESTART_LUA" &>/dev/null
-        else
-            echo 'node.restart()' > "$tty"
-        fi
+        $LUATOOL -d "$RESTART_LUA" &>/dev/null
         sleep $POST_RESTART_DELAY
     fi
 }
@@ -78,9 +70,7 @@ function send_file {
 }
 
 # flash blank init first, to break any reboot loops
-if $RESTART_BEFORE_BLANK; then
-    restart_nodemcu
-fi
+restart_nodemcu
 num_retries=10
 tries=1
 while [[ $tries -le $num_retries ]]; do
@@ -101,9 +91,7 @@ else
     echo -e "$0: $OK[BLANKED]$NC"
 fi
 
-if $RESTART_AFTER_BLANK; then
-    restart_nodemcu
-fi
+restart_nodemcu
 
 if [ -n "$files" ]; then
     echo -e "$0: [FLASH  ] $files"
@@ -139,10 +127,8 @@ else
 fi
 echo -e "$0: $OK[FLASHED]$NC"
 
-if $RESTART_AFTER_FLASH; then
-    sleep $PRE_RESTART_DELAY
-    restart_nodemcu
-fi
+sleep $PRE_RESTART_DELAY
+restart_nodemcu
 
 echo -e "$0: $OK[SUCCESS]$NC"
 if $START_SCREEN; then
