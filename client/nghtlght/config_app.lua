@@ -5,10 +5,10 @@ MQTT_TOPIC_BASE = "/dev/nghtlght"
 
 -- calculate all the mqtt things
 MQTT_CLIENT_ID = MQTT_CLIENT_ID_BASE .. node.chipid()
+print("Client ID is ===[ " .. MQTT_CLIENT_ID .. " ]===")
 MQTT_BOOT_TOPIC = MQTT_BOOT_TOPIC_BASE .. "/" .. MQTT_CLIENT_ID
 MQTT_LWT_TOPIC = MQTT_LWT_TOPIC_BASE .. "/" .. MQTT_CLIENT_ID
 MQTT_LOG_TOPIC = MQTT_LOG_TOPIC_BASE .. "/" .. MQTT_CLIENT_ID
-MQTT_API_SECRET = crypto.toHex(crypto.hash("sha1", "" .. node.chipid() .. node.flashid()))
 MQTT_SUB_TOPIC_DEVTYPE = MQTT_TOPIC_BASE .. "/cmd"
 MQTT_SUB_TOPIC_DEVICE = MQTT_SUB_TOPIC_DEVTYPE .. "/" .. MQTT_CLIENT_ID
 MQTT_SUB_TOPICS = {

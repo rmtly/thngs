@@ -170,5 +170,5 @@ else
 	print("Not using secure MQTT connection; not setting cert.")
 end
 
--- print("Starting connect timer...")
--- tmr.alarm(CONNECT_TIMER, CONNECT_DELAY, tmr.ALARM_AUTO, connect_mqtt)
+print("Starting connect timer...")
+tmr.alarm(CONNECT_TIMER, CONNECT_DELAY, tmr.ALARM_AUTO, connect_mqtt)

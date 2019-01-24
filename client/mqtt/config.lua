@@ -1,5 +1,5 @@
 -- required by init.lua
-FILES = {"config_app", "pre", "main", "wifi", "app", "post"}
+FILES = {"secrets", "config_app", "pre", "main", "wifi", "app", "post"}
 
 -----------------------
 -- required by main.lua
